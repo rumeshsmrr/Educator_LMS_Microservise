@@ -1,0 +1,113 @@
+version: '3'
+services:
+
+  schedule:
+    build:
+      dockerfile: DockerFile
+      context: ./schedule
+    container_name: schedule
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/schedule/node_modules
+
+  analyse:
+    build:
+      dockerfile: DockerFile
+      context: ./analyse
+    container_name: analyse
+    ports:
+      - "8003:8003"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/analyse/node_modules
+
+  enrollment:
+    build:
+      dockerfile: DockerFile
+      context: ./enrollment
+    container_name: enrollment
+    ports:
+      - "8002:8002"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/enrollment/node_modules
+
+  payment:
+    build:
+      dockerfile: DockerFile
+      context: ./paymentService
+    container_name: payment
+    ports:
+      - "8006:8006"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/paymentService/node_modules
+
+  notification:
+    build:
+      dockerfile: DockerFile
+      context: ./notificationService
+    container_name: notification
+    ports:
+      - "8007:8007"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/notificationService/node_modules
+
+  user:
+    build:
+      dockerfile: DockerFile
+      context: ./Usermanagement
+    container_name: user
+    ports:
+      - "8008:8008"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/Usermanagement/node_modules
+
+  course:
+    build:
+      dockerfile: DockerFile
+      context: ./courseService
+    container_name: course
+    ports:
+      - "8004:8004"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/courseService/node_modules
+
+  client:
+    build:
+      dockerfile: DockerFile
+      context: ./client
+    container_name: client
+    ports:
+      - "8081:8081"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/client/node_modules
+
+  nginx:
+    build:
+      dockerfile: DockerFile
+      context: ./proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - schedule
+      - enrollment
+      - analyse
+      - payment
+      - notification
+      - user
+      - course
